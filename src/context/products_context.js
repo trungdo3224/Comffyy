@@ -11,6 +11,9 @@ import {
   GET_SINGLE_PRODUCT_BEGIN,
   GET_SINGLE_PRODUCT_SUCCESS,
   GET_SINGLE_PRODUCT_ERROR,
+  GET_RELATED_PRODUCT_BEGIN,
+  GET_RELATED_PRODUCT_SUCCESS,
+  GET_RELATED_PRODUCT_ERROR,
 } from "../actions";
 
 const initialState = {
@@ -22,7 +25,9 @@ const initialState = {
   singleProductLoading: false,
   singleProductError: false,
   singleProduct: {},
-  relatedProducts: []
+  relatedProducts: [],
+  relatedProductsLoading: false,
+  relatedProductsError: false,
 };
 
 const ProductsContext = React.createContext();
@@ -59,9 +64,20 @@ export const ProductsProvider = ({ children }) => {
     }
   };
 
-  const fetchRelatedProducts = async (company, category) => {
-    
-  }
+  const fetchRelatedProducts = async (company) => {
+    dispatch({ type: GET_RELATED_PRODUCT_BEGIN });
+    // console.log("FETCH RELATED PRODUCTS")
+    try {
+      const response = await axios.get(url);
+      const relatedProducts = response.data.filter(
+        (product) => product.company === company
+      );
+
+      dispatch({ type: GET_RELATED_PRODUCT_SUCCESS, payload: relatedProducts });
+    } catch (error) {
+      dispatch({ type: GET_RELATED_PRODUCT_ERROR });
+    }
+  };
 
   useEffect(() => {
     fetchProducts(url);
@@ -74,6 +90,7 @@ export const ProductsProvider = ({ children }) => {
         closeSidebar,
         fetchProducts,
         fetchSingleProduct,
+        fetchRelatedProducts,
       }}
     >
       {children}

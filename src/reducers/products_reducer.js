@@ -7,6 +7,9 @@ import {
   GET_SINGLE_PRODUCT_BEGIN,
   GET_SINGLE_PRODUCT_SUCCESS,
   GET_SINGLE_PRODUCT_ERROR,
+  GET_RELATED_PRODUCT_BEGIN,
+  GET_RELATED_PRODUCT_SUCCESS,
+  GET_RELATED_PRODUCT_ERROR,
 } from "../actions";
 
 const productsReducer = (state, action) => {
@@ -45,6 +48,29 @@ const productsReducer = (state, action) => {
       singleProduct: {},
       singleProductLoading: false,
       singleProductError: true,
+    };
+  }
+  if (type === GET_RELATED_PRODUCT_BEGIN) {
+    // console.log("FETCH RELATED PRODUCTS BEGIN")
+    return {
+      ...state,
+      relatedProductsLoading: true,
+      relatedProductsError: false,
+    };
+  }
+  if (type === GET_RELATED_PRODUCT_SUCCESS) {
+    return {
+      ...state,
+      relatedProducts: payload,
+      relatedProductsLoading: false,
+      relatedProductsError: false,
+    };
+  }
+  if (type === GET_RELATED_PRODUCT_ERROR) {
+    return {
+      ...state,
+      relatedProductsLoading: false,
+      relatedProductsError: true,
     };
   }
 
