@@ -22,11 +22,15 @@ const SingleProductPage = () => {
     singleProductLoading: loading,
     singleProductError: error,
     singleProduct: product,
-    fetchSingleProduct
+    fetchSingleProduct,
+    fetchRelatedProducts,
+    relatedProducts
   } = useProductsContext();
+  const { name, price, description, stock, stars, reviews, id: sku, company, images } = product;
   useEffect(() => {
-    fetchSingleProduct(`${url}${id}`)
-  }, [id]);
+    fetchSingleProduct(`${url}${id}`);
+    fetchRelatedProducts(company);
+  }, [id, company]);
 
   useEffect(() => {
     if (error) {
@@ -39,7 +43,6 @@ const SingleProductPage = () => {
 
   if (loading) { return <Loading /> }
   if (error) { return <Error /> }
-  const { name, price, description, stock, stars, reviews, id: sku, company, images } = product;
   return (
     <Wrapper>
       <PageHero title={name} product />
@@ -73,8 +76,8 @@ const SingleProductPage = () => {
             {stock > 0 && <AddToCart product={product} />}
           </section>
         </div>
+      <RelatedProducts company={company} products={relatedProducts} />
       </div>
-      <RelatedProducts company={company} />
     </Wrapper>
   )
 }
