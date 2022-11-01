@@ -59,6 +59,9 @@ export const ProductsProvider = ({ children }) => {
     }
   };
 
+  const fetchRelatedProducts = async (company, category) => {
+    
+  }
 
   useEffect(() => {
     fetchProducts(url);
